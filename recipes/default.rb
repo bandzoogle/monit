@@ -23,7 +23,13 @@ directory "/etc/monit/conf.d/" do
   recursive true
 end
 
-template "/etc/monit/monitrc" do
+if platform?("ubuntu")
+  config_dest = "/etc/monit/monitrc"
+else
+  config_dest = "/etc/monit.conf"
+end
+
+template config_dest do
   owner "root"
   group "root"
   mode 0700
