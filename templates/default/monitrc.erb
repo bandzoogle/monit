@@ -35,6 +35,7 @@ set httpd port <%= node[:monit][:port] %>
   pemfile <%= node[:monit][:cert] %>
 <% end %>
 
+
 include /etc/monit.d/*.conf
 include /etc/monit/conf.d/*.conf
 
