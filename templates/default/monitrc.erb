@@ -36,6 +36,6 @@ set httpd port <%= node[:monit][:port] %>
 <% end %>
 
 
-include /etc/monit.d/*
+include /etc/monit.d/*.*
 include /etc/monit/conf.d/*.conf
 
