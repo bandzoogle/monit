@@ -1,19 +1,13 @@
 package "monit"
 
-if platform?("ubuntu")
-  cookbook_file "/etc/default/monit" do
-    source "monit.default"
-    owner "root"
-    group "root"
-    mode 0644
-  end
+cookbook_file "/etc/default/monit" do
+  source "monit.default"
+  owner "root"
+  group "root"
+  mode 0644
+  only_if { platform?("ubuntu") || platform?("debian") }
 end
 
-service "monit" do
-  action [:enable, :start]
-  enabled true
-  supports [:start, :restart, :stop]
-end
 
 directory "/etc/monit/conf.d/" do
   owner  'root'
@@ -34,5 +28,10 @@ template config_dest do
   group "root"
   mode 0700
   source 'monitrc.erb'
-  notifies :restart, resources(:service => "monit"), :delayed
+  notifies :restart, "service[monit]", :delayed
+end
+
+service "monit" do
+  action [:enable, :start]
+  supports [:start, :restart, :stop]
 end
