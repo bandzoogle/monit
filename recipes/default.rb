@@ -9,7 +9,7 @@ cookbook_file "/etc/default/monit" do
 end
 
 
-directory "/etc/monit/conf.d/" do
+directory node["monit"]["config_dir"] do
   owner  'root'
   group 'root'
   mode 0755
@@ -17,13 +17,7 @@ directory "/etc/monit/conf.d/" do
   recursive true
 end
 
-if platform?("ubuntu")
-  config_dest = "/etc/monit/monitrc"
-else
-  config_dest = "/etc/monit.conf"
-end
-
-template config_dest do
+template node["monit"]["config_file"] do
   owner "root"
   group "root"
   mode 0700

@@ -35,3 +35,11 @@ default["monit"]["ssh_port"] = 22
 default["monit"]["eventqueue"]["set"] = true
 default["monit"]["eventqueue"]["basedir"] = "/var/monit"
 default["monit"]["eventqueue"]["slots"] = 1000
+
+if platform?("ubuntu")
+  default["monit"]["config_dir"] = "/etc/monit/conf.d"
+  default["monit"]["config_file"] = "/etc/monit/monitrc"
+else
+  default["monit"]["config_dir"] = "/etc/monit.d"
+  default["monit"]["config_file"] = "/etc/monit.conf"
+end

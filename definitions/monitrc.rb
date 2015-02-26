@@ -5,21 +5,21 @@
 # template_source: filename of the ERB configuration template, defaults to <LWRP Name>.conf.erb
 define :monitrc, :action => :enable, :reload => :delayed, :variables => {}, :template_cookbook => "monit", :template_source => nil do
   params[:template_source] ||= "#{params[:name]}.conf.erb"
-  if params[:action] == :enable
-    template "/etc/monit/conf.d/#{params[:name]}.conf" do
-      owner "root"
-      group "root"
-      mode 0644
-      source params[:template_source]
-      cookbook params[:template_cookbook]
-      variables params[:variables]
-      notifies :restart, "service[monit]", params[:reload]
-      action :create
-    end
-  else
-    file "/etc/monit/conf.d/#{params[:name]}.conf" do
-      action :delete
-      notifies :restart, "service[monit]", params[:reload]
-    end
+  template "#{node["monit"]["config_dir"]}/#{params[:name]}.conf" do
+    owner "root"
+    group "root"
+    mode 0644
+    source params[:template_source]
+    cookbook params[:template_cookbook]
+    variables params[:variables]
+    notifies :restart, "service[monit]", params[:reload]
+    action :create
+    only_if { params[:action] != :disable }
   end
+
+#  file "#{node["monit"]["config_dir"]}/#{params[:name]}.conf" do
+#    action :delete
+#    notifies :restart, "service[monit]", params[:reload]
+#    only_if { params[:action] == :disable }
+#  end
 end
